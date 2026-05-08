@@ -101,6 +101,18 @@
       <!-- Features -->
       <div class="features-grid">
         <div class="feature-card">
+          <div class="hero-country" id="hero-country">United States</div>
+          <div style="margin-top: 16px;">
+            <button id="btn-collab" class="btn btn--collab">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path>
+                <polyline points="22,6 12,13 2,6"></polyline>
+              </svg>
+              Propose Collaboration
+            </button>
+          </div>
+        </div>
+        <div class="feature-card">
           <div class="feature-icon">📊</div>
           <h3>Academic Metrics</h3>
           <p>h-index, citations, i10-index & publication count</p>
@@ -133,14 +145,24 @@
         <span class="brand-mark">S</span>
         <span>SCHOLARZ</span>
       </div>
-      <button id="btn-export" class="btn btn--ghost-sm">
-        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-          <path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4" />
-          <polyline points="17,8 12,3 7,8" />
-          <line x1="12" y1="3" x2="12" y2="15" />
-        </svg>
-        Export
-      </button>
+      <div style="display: flex; gap: 12px;">
+        <button id="btn-share" class="btn btn--ghost-sm" title="Copy Profile Summary">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M4 12v8a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-8"></path>
+            <polyline points="16 6 12 2 8 6"></polyline>
+            <line x1="12" y1="2" x2="12" y2="15"></line>
+          </svg>
+          Share
+        </button>
+        <button id="btn-export" class="btn btn--ghost-sm">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" />
+            <polyline points="7 10 12 15 17 10" />
+            <line x1="12" y1="15" x2="12" y2="3" />
+          </svg>
+          Export Dossier
+        </button>
+      </div>
     </header>
 
     <!-- Profile Hero -->

@@ -204,6 +204,85 @@ const HARDCODED_PROFILES = [
         googleScholar: null
       }
     }
+  },
+  {
+    id: 'manual:balaji-patil',
+    matchNames: [
+      'Balaji Patil',
+      'Dr Balaji Patil',
+      'Dr. Balaji Patil',
+      'Balaji Kishanrao Patil'
+    ],
+    matchInstitutions: [
+      'MIT WPU',
+      'MIT-WPU',
+      'MIT World Peace University',
+      'Pune'
+    ],
+    profile: {
+      name: 'Dr. Balaji Patil',
+      id: 'manual:balaji-patil',
+      designation: 'Professor',
+      institution: 'MIT WPU, Pune',
+      country: 'IN',
+      instType: 'education',
+      contact: {
+        email: 'balaji.patil@mitwpu.edu.in'
+      },
+      education: [
+        'Ph.D. in Computer Engineering'
+      ],
+      researchAreas: [
+        'Computer Networks',
+        'Cyber Security',
+        'Internet of Things (IoT)'
+      ],
+      publications: {
+        total: 15,
+        citations: 85,
+        h_index: 4,
+        i10_index: 2,
+        top_papers: [
+          {
+            title: 'Impact of Technology on Adolescents',
+            year: 2025,
+            citations: 12,
+            venue: 'Journal of Social Sciences',
+            summary: 'A comprehensive study on technology impact.'
+          }
+        ]
+      },
+      experience: [
+        {
+          role: 'Professor',
+          institution: 'MIT WPU, Pune',
+          period: 'Current',
+          current: true
+        }
+      ],
+      contributions: {
+        research: [
+          'Multiple publications in international journals.'
+        ],
+        mentorship: [
+          'Guided several postgraduate research projects.'
+        ]
+      },
+      online: {
+        openalex: null,
+        orcid: null,
+        scholar: null
+      },
+      aiInsights: {
+        uniqueness: 'Strong focus on the intersection of technology and social sciences.',
+        research_strength: 'High',
+        focus: 'Academic'
+      },
+      timeline: [
+        { year: 2025, works_count: 2, cited_by_count: 12 }
+      ],
+      coAuthors: []
+    }
   }
 ];
 
@@ -748,6 +827,15 @@ function renderHero(data) {
           ${escapeHtml(data.institution)}
         </div>
         ${data.country ? `<div class="hero-country">📍 ${escapeHtml(data.country)}</div>` : ''}
+        <div style="margin-top: 24px;">
+          <button id="btn-collab" class="btn btn--collab">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path>
+              <polyline points="22,6 12,13 2,6"></polyline>
+            </svg>
+            Propose Collaboration
+          </button>
+        </div>
       </div>
     </div>
   `;
@@ -1351,7 +1439,87 @@ function switchView(view) {
 }
 
 // ============================================================
-// EXPORT
+// NETWORKING FEATURES
+// ============================================================
+
+document.addEventListener('click', (e) => {
+  const collabBtn = e.target.closest('#btn-collab');
+  const shareBtn = e.target.closest('#btn-share');
+
+  if (collabBtn) {
+    handleCollab(currentProfile);
+  } else if (shareBtn) {
+    handleShare(currentProfile);
+  }
+});
+
+function findHardcodedEmail(name) {
+  if (!name) return '';
+  const normalizedName = normalizeSearchValue(name);
+  for (const entry of HARDCODED_PROFILES) {
+    const matchNames = entry.matchNames || [entry.profile?.name];
+    const found = matchNames.some(candidate => {
+      const normalizedCandidate = normalizeSearchValue(candidate);
+      return normalizedCandidate && (
+        normalizedCandidate.includes(normalizedName) ||
+        normalizedName.includes(normalizedCandidate)
+      );
+    });
+    if (found && entry.profile?.contact?.email) {
+      return entry.profile.contact.email;
+    }
+  }
+  return '';
+}
+
+function handleCollab(data) {
+  if (!data) return;
+  const name = data.name || 'Professor';
+  const institution = data.institution || 'your institution';
+  // First check the profile itself, then fall back to hardcoded DB lookup by name
+  const email = data.contact?.email || data.email || findHardcodedEmail(name);
+  const subject = encodeURIComponent(`Inquiry: Potential Research Collaboration`);
+  const body = encodeURIComponent(`Dear Dr. ${name},
+
+I have been closely following your exceptional work at ${institution}. Your recent publications align perfectly with my research interests, and I am very impressed by your contributions to the field.
+
+I would love to discuss a potential collaboration or schedule a brief meeting to explore synergies between our research.
+
+Best regards,
+[Your Name]
+[Your Title/Institution]`);
+
+  window.location.href = `mailto:${email}?subject=${subject}&body=${body}`;
+  showToast(email ? "Opening email client with professor's email..." : 'Opening email client for collaboration proposal...');
+}
+
+function handleShare(data) {
+  if (!data) return;
+  const name = data.name || 'Professor';
+  const institution = data.institution || 'Institution';
+  const hIndex = data.publications?.h_index || 'N/A';
+  const areas = data.researchAreas?.slice(0, 3).join(', ') || 'Various areas';
+
+  const textToShare = `Check out Dr. ${name}'s academic profile on ScholarZ!
+🏢 ${institution}
+📊 h-index: ${hIndex}
+🔬 Focus: ${areas}`;
+
+  if (navigator.clipboard && window.isSecureContext) {
+    navigator.clipboard.writeText(textToShare).then(() => {
+      showToast('Profile summary copied to clipboard!');
+    }).catch(err => {
+      console.error('Failed to copy: ', err);
+      showToast('Failed to copy profile summary.');
+    });
+  } else {
+    // Fallback
+    showToast('Clipboard access denied, unable to copy.');
+  }
+}
+
+// ============================================================
+// PDF EXPORT
 // ============================================================
 
 btnExport.addEventListener('click', () => {
