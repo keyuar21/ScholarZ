@@ -1,0 +1,9 @@
+{
+  "redirects": [
+    {
+      "source": "/(.*)",
+      "destination": "http://65.0.67.103/$1",
+      "permanent": false
+    }
+  ]
+}
