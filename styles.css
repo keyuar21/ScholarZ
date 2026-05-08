@@ -462,6 +462,141 @@ h1, h2, h3, h4, .font-serif {
   box-shadow: 0 6px 14px rgba(15, 23, 42, 0.3);
 }
 
+.btn--schedule {
+  background: #fff;
+  color: var(--accent-primary);
+  border: 2px solid var(--accent-primary);
+  padding: 12px 24px;
+  border-radius: var(--radius-md);
+  font-family: var(--font-sans);
+  font-size: 0.95rem;
+  font-weight: 600;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  box-shadow: 0 2px 8px rgba(15, 23, 42, 0.08);
+  transition: all var(--transition-fast);
+  letter-spacing: 0.5px;
+}
+
+.btn--schedule:hover {
+  background: var(--accent-primary);
+  color: #fff;
+  transform: translateY(-2px);
+  box-shadow: 0 6px 14px rgba(15, 23, 42, 0.2);
+}
+
+/* ---- Schedule Meeting Modal ---- */
+.schedule-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(15, 23, 42, 0.5);
+  backdrop-filter: blur(4px);
+  z-index: 1000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  opacity: 0;
+  transition: opacity 0.25s ease;
+}
+
+.schedule-overlay--visible {
+  opacity: 1;
+}
+
+.schedule-modal {
+  background: #fff;
+  border-radius: 16px;
+  padding: 36px;
+  width: 100%;
+  max-width: 500px;
+  box-shadow: 0 20px 60px rgba(15, 23, 42, 0.2);
+  transform: translateY(16px);
+  transition: transform 0.25s ease;
+}
+
+.schedule-overlay--visible .schedule-modal {
+  transform: translateY(0);
+}
+
+.schedule-modal-header {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 6px;
+  color: var(--accent-primary);
+}
+
+.schedule-modal-header h2 {
+  font-family: var(--font-serif);
+  font-size: 1.4rem;
+  color: var(--text-primary);
+  margin: 0;
+}
+
+.schedule-modal-sub {
+  font-size: 0.9rem;
+  color: var(--text-muted);
+  margin: 0 0 24px 0;
+  padding-left: 32px;
+}
+
+.schedule-modal-sub strong {
+  color: var(--text-secondary);
+}
+
+.schedule-form {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px;
+  margin-bottom: 28px;
+}
+
+.schedule-field {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.schedule-field--full {
+  grid-column: 1 / -1;
+}
+
+.schedule-field label {
+  font-size: 0.8rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.6px;
+  color: var(--text-muted);
+}
+
+.schedule-field input,
+.schedule-field select {
+  border: 1.5px solid var(--border-subtle);
+  border-radius: var(--radius-sm);
+  padding: 10px 12px;
+  font-family: var(--font-sans);
+  font-size: 0.95rem;
+  color: var(--text-primary);
+  background: var(--bg-page);
+  transition: border-color var(--transition-fast);
+  outline: none;
+}
+
+.schedule-field input:focus,
+.schedule-field select:focus {
+  border-color: var(--accent-primary);
+  box-shadow: 0 0 0 3px rgba(15, 23, 42, 0.06);
+}
+
+.schedule-modal-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 12px;
+}
+
+
 /* Profile Hero */
 .profile-hero {
   max-width: 1000px;

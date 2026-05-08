@@ -827,13 +827,22 @@ function renderHero(data) {
           ${escapeHtml(data.institution)}
         </div>
         ${data.country ? `<div class="hero-country">📍 ${escapeHtml(data.country)}</div>` : ''}
-        <div style="margin-top: 24px;">
+        <div style="margin-top: 24px; display: flex; gap: 12px; flex-wrap: wrap;">
           <button id="btn-collab" class="btn btn--collab">
             <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
               <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path>
               <polyline points="22,6 12,13 2,6"></polyline>
             </svg>
             Propose Collaboration
+          </button>
+          <button id="btn-schedule" class="btn btn--schedule">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect>
+              <line x1="16" y1="2" x2="16" y2="6"></line>
+              <line x1="8" y1="2" x2="8" y2="6"></line>
+              <line x1="3" y1="10" x2="21" y2="10"></line>
+            </svg>
+            Schedule Meeting
           </button>
         </div>
       </div>
@@ -1451,6 +1460,21 @@ document.addEventListener('click', (e) => {
   } else if (shareBtn) {
     handleShare(currentProfile);
   }
+
+  const scheduleBtn = e.target.closest('#btn-schedule');
+  if (scheduleBtn) {
+    openScheduleModal(currentProfile);
+  }
+
+  // Modal close
+  if (e.target.closest('#schedule-modal-cancel') || e.target.id === 'schedule-modal-overlay') {
+    closeScheduleModal();
+  }
+
+  // Modal confirm
+  if (e.target.closest('#schedule-modal-confirm')) {
+    submitScheduleModal();
+  }
 });
 
 function findHardcodedEmail(name) {
@@ -1491,6 +1515,116 @@ Best regards,
 
   window.location.href = `mailto:${email}?subject=${subject}&body=${body}`;
   showToast(email ? "Opening email client with professor's email..." : 'Opening email client for collaboration proposal...');
+}
+
+// ============================================================
+// SCHEDULE MEETING FEATURE
+// ============================================================
+
+function openScheduleModal(data) {
+  if (!data) return;
+  const existing = document.getElementById('schedule-modal-overlay');
+  if (existing) existing.remove();
+
+  // Default to tomorrow at 10am
+  const tomorrow = new Date();
+  tomorrow.setDate(tomorrow.getDate() + 1);
+  const defaultDate = tomorrow.toISOString().slice(0, 10);
+
+  const overlay = document.createElement('div');
+  overlay.id = 'schedule-modal-overlay';
+  overlay.className = 'schedule-overlay';
+  overlay.innerHTML = `
+    <div class="schedule-modal" role="dialog" aria-modal="true">
+      <div class="schedule-modal-header">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect>
+          <line x1="16" y1="2" x2="16" y2="6"></line>
+          <line x1="8" y1="2" x2="8" y2="6"></line>
+          <line x1="3" y1="10" x2="21" y2="10"></line>
+        </svg>
+        <h2>Schedule a Meeting</h2>
+      </div>
+      <p class="schedule-modal-sub">with <strong>${escapeHtml(data.name)}</strong> · ${escapeHtml(data.institution)}</p>
+      <div class="schedule-form">
+        <div class="schedule-field">
+          <label for="sched-date">Date</label>
+          <input type="date" id="sched-date" value="${defaultDate}" min="${defaultDate}" />
+        </div>
+        <div class="schedule-field">
+          <label for="sched-time">Start Time</label>
+          <input type="time" id="sched-time" value="10:00" />
+        </div>
+        <div class="schedule-field">
+          <label for="sched-duration">Duration</label>
+          <select id="sched-duration">
+            <option value="30">30 minutes</option>
+            <option value="60" selected>1 hour</option>
+            <option value="90">1.5 hours</option>
+            <option value="120">2 hours</option>
+          </select>
+        </div>
+        <div class="schedule-field schedule-field--full">
+          <label for="sched-title">Meeting Title</label>
+          <input type="text" id="sched-title" value="Research Collaboration Discussion with ${escapeHtml(data.name)}" />
+        </div>
+      </div>
+      <div class="schedule-modal-actions">
+        <button id="schedule-modal-cancel" class="btn btn--ghost-sm">Cancel</button>
+        <button id="schedule-modal-confirm" class="btn btn--collab">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+            <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path>
+            <polyline points="15 3 21 3 21 9"></polyline>
+            <line x1="10" y1="14" x2="21" y2="3"></line>
+          </svg>
+          Open Google Calendar
+        </button>
+      </div>
+    </div>
+  `;
+  document.body.appendChild(overlay);
+  requestAnimationFrame(() => overlay.classList.add('schedule-overlay--visible'));
+}
+
+function closeScheduleModal() {
+  const overlay = document.getElementById('schedule-modal-overlay');
+  if (!overlay) return;
+  overlay.classList.remove('schedule-overlay--visible');
+  setTimeout(() => overlay.remove(), 250);
+}
+
+function submitScheduleModal() {
+  const dateVal = document.getElementById('sched-date')?.value;
+  const timeVal = document.getElementById('sched-time')?.value;
+  const durationVal = parseInt(document.getElementById('sched-duration')?.value || '60');
+  const titleVal = document.getElementById('sched-title')?.value || 'Research Collaboration Meeting';
+
+  if (!dateVal || !timeVal) {
+    showToast('Please select a date and time.');
+    return;
+  }
+
+  // Build Google Calendar URL
+  const [year, month, day] = dateVal.split('-').map(Number);
+  const [hour, minute] = timeVal.split(':').map(Number);
+
+  const start = new Date(year, month - 1, day, hour, minute);
+  const end = new Date(start.getTime() + durationVal * 60000);
+
+  const fmt = (d) => d.toISOString().replace(/[-:]/g, '').split('.')[0] + 'Z';
+
+  const params = new URLSearchParams({
+    action: 'TEMPLATE',
+    text: titleVal,
+    dates: `${fmt(start)}/${fmt(end)}`,
+    details: `Academic collaboration meeting scheduled via ScholarZ.\n\nDuration: ${durationVal} minutes`,
+    sf: 'true',
+    output: 'xml'
+  });
+
+  window.open(`https://calendar.google.com/calendar/render?${params.toString()}`, '_blank');
+  closeScheduleModal();
+  showToast('Opening Google Calendar...', 'success');
 }
 
 function handleShare(data) {
