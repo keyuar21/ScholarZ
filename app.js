@@ -20,6 +20,193 @@ const btnExport = document.getElementById('btn-export');
 // ---- State ----
 let currentProfile = null; // transformed profile data
 
+// ---- Manual profile fallbacks ----
+// Add low-online-presence professors here. The search will show these
+// profiles before OpenAlex results when the name/institution matches.
+const HARDCODED_PROFILES = [
+  {
+    id: 'manual:aparna-atul-junnarkar',
+    matchNames: [
+      'Aparna Atul Junnarkar',
+      'Dr Aparna Atul Junnarkar',
+      'Dr. Aparna Atul Junnarkar',
+      'Prof Dr Aparna Atul Junnarkar',
+      'Aparna Junnarkar'
+    ],
+    matchInstitutions: [
+      'PVGCOET',
+      'PVG College of Engineering and Technology',
+      "PVG's College of Engineering and Technology",
+      "Pune Vidyarthi Griha's College of Engineering and Technology",
+      'MIT WPU',
+      'MIT-WPU',
+      'MIT World Peace University'
+    ],
+    profile: {
+      name: 'Dr. Aparna Atul Junnarkar',
+      id: 'manual:aparna-atul-junnarkar',
+      designation: 'Associate Professor',
+      institution: 'MIT WPU, Pune',
+      country: 'IN',
+      instType: 'education',
+      contact: {
+        email: 'aaj_comp@pvgcoet.ac.in',
+        phone: '020 24228258'
+      },
+      education: [
+        'Ph.D. in Computer Science and Engineering, Kalinga University, Raipur, 2018',
+        'M.E. in Computer Engineering, Pune University, Pune, 2009',
+        'B.E. in Computer Science and Engineering, Shivaji University, Sangli, 1999'
+      ],
+      researchAreas: [
+        'Computer Network',
+        'Computer Security',
+        'IoT',
+        'MANET Routing',
+        'Wireless Sensor Networks',
+        'Vehicular Wireless Communications',
+        'Network Security'
+      ],
+      publications: {
+        total: 24,
+        citations: 142,
+        h_index: 6,
+        i10_index: 4,
+        top_papers: [
+          {
+            title: 'Network Coverage Optimization using D2D Mobile Relay Technique',
+            year: null,
+            citations: 0,
+            venue: 'International Journal of Recent Technology and Engineering (IJRTE)',
+            summary: 'Work on optimizing network coverage using device-to-device mobile relay techniques for wireless communication scenarios.'
+          },
+          {
+            title: 'Energy Optimization Algorithm for Future Wireless Communications',
+            year: null,
+            citations: 0,
+            venue: 'Journal of Advance Research and Dynamical Control System (JARDCS)',
+            summary: 'Research focused on energy optimization methods for future wireless communication networks.'
+          },
+          {
+            title: 'Optimized Resource Utilization Algorithm for Fi-Wi Communication Networks',
+            year: null,
+            citations: 0,
+            venue: 'Journal of Advance Research and Dynamical Control System (JARDCS)',
+            summary: 'Research on improving resource utilization in fiber-wireless communication networks.'
+          },
+          {
+            title: 'Agent based Clustering Routing Protocol for Wireless Sensor Networks',
+            year: null,
+            citations: 0,
+            venue: 'International Journal of Recent Technology and Engineering (IJRTE)',
+            summary: 'A routing protocol study for wireless sensor networks using agent-based clustering methods.'
+          },
+          {
+            title: 'Robust and Reliable Multicast Routing Protocol for IoT Enabled Vehicular Wireless Communications',
+            year: null,
+            citations: 0,
+            venue: 'Periodicals of Engineering and Natural Sciences (PEN)',
+            summary: 'Research on reliable multicast routing for IoT-enabled vehicular wireless communication environments.'
+          },
+          {
+            title: 'Mobility Aware IoT Enabled Vehicular Wireless Communications using Clustering Based Multicast Routing',
+            year: null,
+            citations: 0,
+            venue: 'Periodico Tche Quimica',
+            summary: 'Study of mobility-aware multicast routing for IoT-enabled vehicular wireless communications.'
+          },
+          {
+            title: 'Lightweight Novel Trust based Framework for IoT Enabled Wireless Network Communications',
+            year: null,
+            citations: 0,
+            venue: 'Periodicals of Engineering and Natural Sciences (PEN)',
+            summary: 'A trust-based framework for secure and lightweight communication in IoT-enabled wireless networks.'
+          }
+        ]
+      },
+      experience: [
+        {
+          role: 'Associate Professor',
+          institution: 'MIT WPU, Pune',
+          period: 'Current',
+          current: true
+        },
+        {
+          role: 'Teaching Experience',
+          institution: 'Academic',
+          period: '21 Years',
+          current: false
+        },
+        {
+          role: 'Research Experience',
+          institution: 'Research',
+          period: '5 Years',
+          current: false
+        },
+        {
+          role: 'Industrial Experience',
+          institution: 'Industry',
+          period: '2.5 Years',
+          current: false
+        }
+      ],
+      contributions: {
+        research: [
+          'Patent: Quality of Service (QoS) Improvement Routing Protocol for MANET using Ant Colony Optimization. Application No. 201821021892A.',
+          'Patent: Secure and QoS Aware Efficient Routing Protocol for Ad Hoc Networks. Application No. 201821021893A.',
+          'Patent: System for driver assistance using sensor fusion convolution neural networks. Application No. 201821049058A.',
+          'Patent: Mobile Voice Based Vehicle Control System. Application No. 201921001504A.',
+          'Patent: Real Time Accident Detection and Alarm Generation System. Application No. 201921000283A.',
+          'Published 8 international journal papers, 8 national journal papers, 5 international conference papers, and 2 national conference papers.',
+          'Authored New Concept in Network Security. ISBN 978-93-86369-71-0.',
+          'Guided 2 Ph.D. students and 12 PG students; evaluated 2 Ph.D. students.'
+        ],
+        impact: [
+          'Computer Network',
+          'Computer Security',
+          'IoT',
+          'MANET',
+          'Ad Hoc Networks',
+          'Vehicular Wireless Communications',
+          'Academic Mentoring'
+        ]
+      },
+      aiInsights: {
+        uniqueness: 'Dr. Aparna Atul Junnarkar works across secure and QoS-aware communication systems, including MANET routing, IoT-enabled wireless networks, wireless sensor networks, and vehicular communication. Her profile combines academic teaching, network security research, patent activity, and student mentorship.',
+        research_strength: 'Medium',
+        focus: 'Academic'
+      },
+      timeline: [],
+      coAuthors: [],
+      service: {
+        phdGuided: 2,
+        phdEvaluated: 2,
+        pgGuided: 12,
+        memberships: ['ISTE', 'MIEEE', 'MNCSSS'],
+        organized: {
+          fdpSttp: 10,
+          workshops: 10,
+          conferencesSeminars: 2
+        },
+        attended: {
+          fdpSttp: 10,
+          workshops: 10,
+          conferencesSeminars: 10,
+          onlineCertificationCourses: 2,
+          webinars: 2
+        },
+        resourcePersonCount: 2,
+        reviewerJudgeCount: 3
+      },
+      online: {
+        orcid: null,
+        openAlexId: null,
+        googleScholar: null
+      }
+    }
+  }
+];
+
 // ============================================================
 // SEARCH
 // ============================================================
@@ -45,6 +232,7 @@ async function performSearch() {
   }
 
   const displayQuery = college ? `"${name}" at "${college}"` : `"${name}"`;
+  const hardcodedMatches = getSafeHardcodedMatches(name, college);
 
   searchResults.innerHTML = `
     <div class="search-loading">
@@ -56,7 +244,7 @@ async function performSearch() {
   try {
     const urls = [];
     urls.push(`${OPENALEX_API}/authors?search=${encodeURIComponent(name)}&per_page=20&mailto=${POLITE_EMAIL}`);
-    
+
     // Fallback: If name has 3 or more words, also search just first and last name
     // (OpenAlex inverted index requires all words to match, so middle names can miss profiles)
     const nameParts = name.trim().split(/\s+/);
@@ -67,7 +255,7 @@ async function performSearch() {
 
     const responses = await Promise.all(urls.map(url => fetch(url)));
     let allResults = [];
-    
+
     for (const res of responses) {
       if (res.ok) {
         const data = await res.json();
@@ -90,7 +278,7 @@ async function performSearch() {
     // If college is provided, strictly filter for matches in any historical affiliation
     if (college && results.length > 0) {
       const lowerCollege = college.toLowerCase().replace(/[^a-z0-9]/g, '');
-      
+
       const isSubsequence = (sub, str) => {
         if (!sub) return true;
         let i = 0;
@@ -110,7 +298,7 @@ async function performSearch() {
             if (a.institution) instNames.push(a.institution.display_name || '');
           });
         }
-        
+
         return instNames.some(n => {
           const norm = n.toLowerCase().replace(/[^a-z0-9]/g, '');
           return norm.includes(lowerCollege) || isSubsequence(lowerCollege, norm);
@@ -118,6 +306,15 @@ async function performSearch() {
       });
       // Sort by works count to put best matches top
       results.sort((a, b) => (b.works_count || 0) - (a.works_count || 0));
+    }
+
+    if (hardcodedMatches.length > 0) {
+      const manualResults = getSafeHardcodedSearchResults(hardcodedMatches);
+      const manualIds = new Set(manualResults.map(result => result.id));
+      results = [
+        ...manualResults,
+        ...results.filter(result => !manualIds.has(result.id))
+      ];
     }
 
     if (results.length === 0) {
@@ -134,6 +331,15 @@ async function performSearch() {
     renderSearchResults(results, results.length);
   } catch (err) {
     console.error('Search error:', err);
+    if (hardcodedMatches.length > 0) {
+      const manualResults = getSafeHardcodedSearchResults(hardcodedMatches);
+      if (manualResults.length > 0) {
+        renderSearchResults(manualResults, manualResults.length);
+        showToast('Showing saved profile because live search failed', 'success');
+        return;
+      }
+    }
+
     searchResults.innerHTML = `
       <div class="search-error">
         <div class="search-error-icon">⚠️</div>
@@ -202,6 +408,21 @@ function renderSearchResults(results, totalCount) {
 // ============================================================
 
 async function loadAuthorProfile(authorId) {
+  const hardcodedProfile = getSafeHardcodedProfileById(authorId);
+  if (hardcodedProfile) {
+    showLoading('Loading saved profile...', 'Using manually curated academic data');
+    currentProfile = cloneProfile(hardcodedProfile);
+    renderDashboard(currentProfile);
+    hideLoading();
+    switchView('dashboard');
+    return;
+  }
+
+  if (authorId.startsWith('manual:')) {
+    showToast('Saved profile is unavailable right now');
+    return;
+  }
+
   showLoading('Fetching author profile…', 'Gathering publications, citations & research areas');
 
   try {
@@ -314,7 +535,7 @@ function transformToProfile(author, works) {
       }
     });
   });
-  
+
   const topCoAuthors = Object.values(coAuthorCounts)
     .sort((a, b) => b.count - a.count)
     .slice(0, 15);
@@ -390,7 +611,7 @@ function buildExperience(author) {
     const sorted = [...years].sort((a, b) => a - b);
     const startYear = sorted[0];
     const endYear = sorted[sorted.length - 1];
-    
+
     // Predict if current based on the end year being very recent
     const isCurrent = endYear >= currentYear - 1;
 
@@ -507,7 +728,7 @@ function renderDashboard(data) {
   renderContributions(data);
   renderOnline(data);
   renderInsights(data);
-  
+
   // Crazy Features
   renderTimeline(data);
   renderNetwork(data);
@@ -521,7 +742,7 @@ function renderHero(data) {
       <div class="hero-avatar">${getInitials(data.name)}</div>
       <div class="hero-info">
         <h1 class="hero-name">${escapeHtml(data.name)}</h1>
-        <div class="hero-title">Researcher</div>
+        <div class="hero-title">${escapeHtml(data.designation || 'Researcher')}</div>
         <div class="hero-institution">
           <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z"/><polyline points="9,22 9,12 15,12 15,22"/></svg>
           ${escapeHtml(data.institution)}
@@ -537,7 +758,12 @@ function renderSummary(data) {
   const el = document.getElementById('summary-content');
   const parts = [];
 
-  parts.push(`${data.name} is a researcher${data.institution !== 'Not Available' ? ` at ${data.institution}` : ''}.`);
+  if (data.designation) {
+    const article = /^[aeiou]/i.test(data.designation) ? 'an' : 'a';
+    parts.push(`${data.name} is ${article} ${data.designation}${data.institution !== 'Not Available' ? ` at ${data.institution}` : ''}.`);
+  } else {
+    parts.push(`${data.name} is a researcher${data.institution !== 'Not Available' ? ` at ${data.institution}` : ''}.`);
+  }
 
   if (data.researchAreas.length > 0) {
     const areas = data.researchAreas.slice(0, 4).join(', ');
@@ -560,8 +786,51 @@ function renderSummary(data) {
     }
   }
 
-  const disclaimer = `<div style="margin-top: 12px; font-size: 0.75rem; color: var(--text-muted); border-top: 1px solid var(--border-subtle); padding-top: 8px;">Note: Academic data is automatically aggregated by OpenAlex. Profiles with common names may sometimes contain merged historical affiliations.</div>`;
-  el.innerHTML = `<p style="font-size: 0.92rem; color: var(--text-secondary); line-height: 1.75;">${escapeHtml(parts.join(' '))}</p>${disclaimer}`;
+  const detailSections = [];
+  if (data.education?.length) {
+    detailSections.push({
+      label: 'Education',
+      value: data.education.join('; ')
+    });
+  }
+  if (data.contact?.email || data.contact?.phone) {
+    const contactItems = [
+      data.contact.email ? `Email: ${data.contact.email}` : '',
+      data.contact.phone ? `Phone: ${data.contact.phone}` : ''
+    ].filter(Boolean);
+    detailSections.push({
+      label: 'Contact',
+      value: contactItems.join(' | ')
+    });
+  }
+  if (data.service) {
+    const memberships = data.service.memberships?.length ? `Memberships: ${data.service.memberships.join(', ')}` : '';
+    const mentorship = `Guidance: ${data.service.phdGuided || 0} Ph.D. students, ${data.service.pgGuided || 0} PG students`;
+    const organized = data.service.organized
+      ? `Organized: ${data.service.organized.fdpSttp || 0} FDPs/STTPs, ${data.service.organized.workshops || 0} workshops, ${data.service.organized.conferencesSeminars || 0} conferences/seminars`
+      : '';
+    detailSections.push({
+      label: 'Academic Service',
+      value: [mentorship, memberships, organized].filter(Boolean).join(' | ')
+    });
+  }
+
+  const detailsHtml = detailSections.length ? `
+    <div style="margin-top: 14px; display: grid; gap: 8px;">
+      ${detailSections.map(section => `
+        <div style="font-size: 0.8rem; color: var(--text-secondary); line-height: 1.55;">
+          <strong style="color: var(--text-primary);">${escapeHtml(section.label)}:</strong>
+          ${escapeHtml(section.value)}
+        </div>
+      `).join('')}
+    </div>
+  ` : '';
+
+  const disclaimerText = data.id?.startsWith('manual:')
+    ? 'Note: This is a manually curated profile because public academic index coverage is limited.'
+    : 'Note: Academic data is automatically aggregated by OpenAlex. Profiles with common names may sometimes contain merged historical affiliations.';
+  const disclaimer = `<div style="margin-top: 12px; font-size: 0.75rem; color: var(--text-muted); border-top: 1px solid var(--border-subtle); padding-top: 8px;">${disclaimerText}</div>`;
+  el.innerHTML = `<p style="font-size: 0.92rem; color: var(--text-secondary); line-height: 1.75;">${escapeHtml(parts.join(' '))}</p>${detailsHtml}${disclaimer}`;
 }
 
 // ---- 2. Research Areas ----
@@ -582,6 +851,7 @@ function renderResearch(data) {
 function renderPublications(data) {
   const el = document.getElementById('publications-content');
   const papers = data.publications.top_papers;
+  const visiblePapers = data.id?.startsWith('manual:') ? papers : papers.slice(0, 5);
 
   if (papers.length === 0) {
     el.innerHTML = '<p class="not-available">Not Available</p>';
@@ -590,7 +860,7 @@ function renderPublications(data) {
 
   el.innerHTML = `
     <div class="pub-list">
-      ${papers.slice(0, 5).map((p, i) => `
+      ${visiblePapers.map((p, i) => `
         <div class="pub-item">
           <div class="pub-header">
             <div class="pub-title">${escapeHtml(p.title)}</div>
@@ -628,7 +898,7 @@ function highlightTerms(text) {
 }
 
 // Attach to window so it works with inline onclick
-window.toggleSummary = function(id, btn) {
+window.toggleSummary = function (id, btn) {
   const box = document.getElementById(id);
   box.classList.toggle('active');
   btn.classList.toggle('active');
@@ -742,6 +1012,27 @@ function renderOnline(data) {
   const arrowSVG = `<svg class="online-link-arrow" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9,18 15,12 9,6"/></svg>`;
   const links = [];
 
+  if (data.contact?.email) {
+    links.push({
+      name: 'Email',
+      url: `mailto:${data.contact.email}`,
+      displayUrl: data.contact.email,
+      icon: 'web',
+      emoji: '@'
+    });
+  }
+
+  if (data.contact?.phone) {
+    const phoneHref = data.contact.phone.replace(/[^0-9+]/g, '');
+    links.push({
+      name: 'Phone',
+      url: `tel:${phoneHref}`,
+      displayUrl: data.contact.phone,
+      icon: 'web',
+      emoji: 'TEL'
+    });
+  }
+
   if (data.online.openAlexId) {
     links.push({
       name: 'OpenAlex Profile',
@@ -760,10 +1051,10 @@ function renderOnline(data) {
     });
   }
 
-  // Construct Google Scholar search link
-  const scholarSearchUrl = `https://scholar.google.com/scholar?q=author:"${encodeURIComponent(data.name)}"`;
+  // Use an exact Scholar URL for manual profiles when available.
+  const scholarSearchUrl = data.online.googleScholar || `https://scholar.google.com/scholar?q=author:"${encodeURIComponent(data.name)}"`;
   links.push({
-    name: 'Search on Google Scholar',
+    name: data.online.googleScholar ? 'Google Scholar Profile' : 'Search on Google Scholar',
     url: scholarSearchUrl,
     icon: 'scholar',
     emoji: '🎓'
@@ -781,7 +1072,7 @@ function renderOnline(data) {
           <div class="online-link-icon online-link-icon--${l.icon}">${l.emoji}</div>
           <div>
             <div class="online-link-name">${escapeHtml(l.name)}</div>
-            <div class="online-link-url">${escapeHtml(l.url)}</div>
+            <div class="online-link-url">${escapeHtml(l.displayUrl || l.url)}</div>
           </div>
           ${arrowSVG}
         </a>
@@ -846,7 +1137,7 @@ let timelineChartInstance = null;
 
 function renderTimeline(data) {
   const ctx = document.getElementById('timeline-chart').getContext('2d');
-  
+
   if (timelineChartInstance) {
     timelineChartInstance.destroy();
   }
@@ -868,7 +1159,7 @@ function renderTimeline(data) {
         {
           label: 'Publications',
           data: works,
-          backgroundColor: 'rgba(34, 211, 238, 0.8)', // accent-4
+          backgroundColor: '#1e3a8a', // Lighter Oxford Blue
           borderRadius: 4,
           order: 2
         },
@@ -876,8 +1167,8 @@ function renderTimeline(data) {
           label: 'Citations',
           data: citations,
           type: 'line',
-          borderColor: '#a78bfa', // accent-3
-          backgroundColor: 'rgba(167, 139, 250, 0.2)',
+          borderColor: '#b45309', // Deep Gold/Brass
+          backgroundColor: 'rgba(180, 83, 9, 0.1)',
           borderWidth: 2,
           pointBackgroundColor: '#fff',
           pointRadius: 3,
@@ -897,39 +1188,41 @@ function renderTimeline(data) {
       },
       plugins: {
         legend: {
-          labels: { color: '#9d9db8', font: { family: 'Inter' } }
+          labels: { color: '#475569', font: { family: 'Inter' } }
         },
         tooltip: {
-          backgroundColor: 'rgba(15, 15, 30, 0.9)',
-          titleFont: { family: 'Inter', size: 13 },
+          backgroundColor: 'rgba(255, 255, 255, 0.95)',
+          titleColor: '#0f172a',
+          bodyColor: '#1e293b',
+          titleFont: { family: 'Inter', size: 13, weight: 'bold' },
           bodyFont: { family: 'Inter', size: 12 },
           displayColors: true,
           padding: 10,
-          cornerRadius: 8,
-          borderColor: 'rgba(255,255,255,0.1)',
+          cornerRadius: 4,
+          borderColor: '#e2e8f0',
           borderWidth: 1
         }
       },
       scales: {
         x: {
-          grid: { color: 'rgba(255,255,255,0.05)', drawBorder: false },
-          ticks: { color: '#5a5a78', font: { family: 'Inter' } }
+          grid: { color: 'rgba(0,0,0,0.05)', drawBorder: false },
+          ticks: { color: '#64748b', font: { family: 'Inter' } }
         },
         y: {
           type: 'linear',
           display: true,
           position: 'left',
-          grid: { color: 'rgba(255,255,255,0.05)', drawBorder: false },
-          ticks: { color: '#5a5a78', font: { family: 'Inter' } },
-          title: { display: true, text: 'Publications', color: '#5a5a78' }
+          grid: { color: 'rgba(0,0,0,0.05)', drawBorder: false },
+          ticks: { color: '#64748b', font: { family: 'Inter' } },
+          title: { display: true, text: 'Publications', color: '#64748b' }
         },
         y1: {
           type: 'linear',
           display: true,
           position: 'right',
-          grid: { drawOnChartArea: false }, 
-          ticks: { color: '#a78bfa', font: { family: 'Inter' } },
-          title: { display: true, text: 'Citations', color: '#a78bfa' }
+          grid: { drawOnChartArea: false },
+          ticks: { color: '#b45309', font: { family: 'Inter' } },
+          title: { display: true, text: 'Citations', color: '#b45309' }
         }
       }
     }
@@ -939,7 +1232,7 @@ function renderTimeline(data) {
 // ---- CRAZY FEATURES: Network Graph ----
 function renderNetwork(data) {
   const container = document.getElementById('network-content');
-  
+
   if (!data.coAuthors || data.coAuthors.length === 0) {
     container.innerHTML = '<p class="not-available">Not enough collaboration data</p>';
     return;
@@ -948,35 +1241,35 @@ function renderNetwork(data) {
   // Create nodes
   const nodes = [];
   // Central node (the professor)
-  nodes.push({ 
-    id: data.id, 
-    label: data.name, 
-    color: { background: '#7c3aed', border: '#a78bfa' },
+  nodes.push({
+    id: data.id,
+    label: data.name,
+    color: { background: '#0f172a', border: '#1e3a8a' },
     font: { color: '#fff', face: 'Inter' },
     size: 25,
     shape: 'dot'
   });
 
   const edges = [];
-  
+
   data.coAuthors.forEach(co => {
     // Co-author node
     nodes.push({
       id: co.id,
       label: co.name,
-      color: { background: 'rgba(20, 20, 40, 0.8)', border: '#06b6d4' },
-      font: { color: '#9d9db8', face: 'Inter', size: 12 },
-      size: 10 + Math.min(co.count * 2, 10), // Size scales slightly with co-authorship freq
+      color: { background: '#ffffff', border: '#1e3a8a' },
+      font: { color: '#475569', face: 'Inter', size: 12 },
+      size: 10 + Math.min(co.count * 2, 10),
       shape: 'dot'
     });
-    
+
     // Edge connecting them
     edges.push({
       from: data.id,
       to: co.id,
       value: co.count,
       title: `${co.count} shared publications`,
-      color: { color: 'rgba(6, 182, 212, 0.3)', highlight: '#22d3ee' }
+      color: { color: 'rgba(30, 58, 138, 0.2)', highlight: '#1e3a8a' }
     });
   });
 
@@ -993,7 +1286,7 @@ function renderNetwork(data) {
       timestep: 0.35,
       stabilization: { iterations: 150 }
     },
-    nodes: { borderWidth: 2, shadow: { enabled: true, color: 'rgba(124, 58, 237, 0.4)', size: 15 } },
+    nodes: { borderWidth: 2, shadow: { enabled: true, color: 'rgba(0, 0, 0, 0.05)', size: 5 } },
     edges: { smooth: { type: 'continuous' } },
     interaction: { hover: true, tooltipDelay: 200 }
   };
@@ -1069,14 +1362,14 @@ btnExport.addEventListener('click', () => {
 function exportProfile(data) {
   showToast('Generating HD PDF... Please wait', 'success');
   const element = document.getElementById('pdf-content');
-  
+
   // Configure html2pdf options
   const opt = {
-    margin:       [10, 10, 10, 10], // top, left, bottom, right
-    filename:     `scholarz-${data.name.replace(/\\s+/g, '-').toLowerCase()}.pdf`,
-    image:        { type: 'jpeg', quality: 0.98 },
-    html2canvas:  { scale: 2, useCORS: true, logging: false, backgroundColor: '#06060e' },
-    jsPDF:        { unit: 'mm', format: 'a4', orientation: 'portrait' }
+    margin: [10, 10, 10, 10], // top, left, bottom, right
+    filename: `scholarz-${data.name.replace(/\\s+/g, '-').toLowerCase()}.pdf`,
+    image: { type: 'jpeg', quality: 0.98 },
+    html2canvas: { scale: 2, useCORS: true, logging: false, backgroundColor: '#06060e' },
+    jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' }
   };
 
   // Run html2pdf
@@ -1092,6 +1385,175 @@ function exportProfile(data) {
 // ============================================================
 // UTILITIES
 // ============================================================
+
+function getSafeHardcodedMatches(name, college) {
+  try {
+    return getHardcodedProfileEntries(name, college);
+  } catch (err) {
+    console.warn('Hardcoded profile matching skipped:', err);
+    return [];
+  }
+}
+
+function getSafeHardcodedSearchResults(entries) {
+  try {
+    return entries.map(createHardcodedSearchResult).filter(Boolean);
+  } catch (err) {
+    console.warn('Hardcoded search results skipped:', err);
+    return [];
+  }
+}
+
+function getSafeHardcodedProfileById(authorId) {
+  try {
+    return getHardcodedProfileById(authorId);
+  } catch (err) {
+    console.warn('Hardcoded profile load skipped:', err);
+    return null;
+  }
+}
+
+function getHardcodedProfileEntries(name, college) {
+  return HARDCODED_PROFILES.filter(entry => hardcodedProfileMatches(entry, name, college));
+}
+
+function getHardcodedProfileById(authorId) {
+  const entry = HARDCODED_PROFILES.find(item => getHardcodedProfileId(item) === authorId);
+  if (!entry) return null;
+  return hydrateHardcodedProfile(entry.profile || {}, getHardcodedProfileId(entry));
+}
+
+function hardcodedProfileMatches(entry, name, college) {
+  const profile = entry.profile || {};
+  const normalizedName = normalizeSearchValue(name);
+  if (!normalizedName) return false;
+
+  const matchNames = entry.matchNames || [profile.name];
+  const nameMatches = matchNames.some(candidate => {
+    const normalizedCandidate = normalizeSearchValue(candidate);
+    return normalizedCandidate
+      && (normalizedCandidate === normalizedName
+        || normalizedCandidate.includes(normalizedName)
+        || normalizedName.includes(normalizedCandidate));
+  });
+
+  if (!nameMatches) return false;
+  if (!college) return true;
+
+  const normalizedCollege = normalizeSearchValue(college);
+  const experienceInstitutions = (profile.experience || []).map(item => item.institution);
+  const matchInstitutions = entry.matchInstitutions || [
+    profile.institution,
+    ...experienceInstitutions
+  ];
+
+  return matchInstitutions.some(candidate => {
+    const normalizedCandidate = normalizeSearchValue(candidate);
+    return normalizedCandidate
+      && (normalizedCandidate.includes(normalizedCollege)
+        || normalizedCollege.includes(normalizedCandidate)
+        || isSubsequence(normalizedCollege, normalizedCandidate));
+  });
+}
+
+function createHardcodedSearchResult(entry) {
+  const profile = hydrateHardcodedProfile(entry.profile || {}, getHardcodedProfileId(entry));
+  const papers = profile.publications.top_papers || [];
+  const citations = profile.publications.citations
+    ?? papers.reduce((sum, paper) => sum + (paper.citations || 0), 0);
+
+  return {
+    id: profile.id,
+    display_name: profile.name,
+    last_known_institutions: [
+      {
+        display_name: profile.institution,
+        country_code: profile.country,
+        type: profile.instType
+      }
+    ],
+    works_count: profile.publications.total ?? papers.length,
+    cited_by_count: citations,
+    summary_stats: {
+      h_index: profile.publications.h_index,
+      i10_index: profile.publications.i10_index
+    },
+    x_concepts: profile.researchAreas.map((area, index) => ({
+      display_name: area,
+      score: 1 - (index * 0.05)
+    })),
+    isHardcoded: true
+  };
+}
+
+function hydrateHardcodedProfile(profile, id) {
+  const publications = profile.publications || {};
+  const topPapers = publications.top_papers || [];
+  const researchAreas = profile.researchAreas || [];
+  const contributions = profile.contributions || {};
+  const online = profile.online || {};
+
+  return {
+    name: profile.name || 'Not Available',
+    id: profile.id || id,
+    designation: profile.designation || null,
+    institution: profile.institution || 'Not Available',
+    country: profile.country || '',
+    instType: profile.instType || '',
+    contact: profile.contact || {},
+    education: profile.education || [],
+    researchAreas,
+    publications: {
+      total: publications.total ?? topPapers.length,
+      citations: publications.citations ?? topPapers.reduce((sum, paper) => sum + (paper.citations || 0), 0),
+      h_index: publications.h_index ?? null,
+      i10_index: publications.i10_index ?? null,
+      top_papers: topPapers
+    },
+    experience: profile.experience || [],
+    contributions: {
+      research: contributions.research || [],
+      impact: contributions.impact || researchAreas
+    },
+    aiInsights: profile.aiInsights || {
+      uniqueness: 'Manual profile created because public academic index coverage is limited.',
+      research_strength: 'Low',
+      focus: 'Academic'
+    },
+    timeline: profile.timeline || [],
+    coAuthors: profile.coAuthors || [],
+    service: profile.service || null,
+    online: {
+      orcid: online.orcid || null,
+      openAlexId: online.openAlexId || null,
+      googleScholar: online.googleScholar || null
+    }
+  };
+}
+
+function getHardcodedProfileId(entry) {
+  return entry.id || entry.profile?.id || `manual:${normalizeSearchValue(entry.profile?.name || 'profile')}`;
+}
+
+function normalizeSearchValue(value) {
+  return String(value || '')
+    .toLowerCase()
+    .replace(/^(dr|prof|professor|mr|ms|mrs)\.?\s+/i, '')
+    .replace(/[^a-z0-9]/g, '');
+}
+
+function isSubsequence(sub, str) {
+  if (!sub) return true;
+  let i = 0;
+  for (let j = 0; j < str.length && i < sub.length; j++) {
+    if (sub[i] === str[j]) i++;
+  }
+  return i === sub.length;
+}
+
+function cloneProfile(profile) {
+  return JSON.parse(JSON.stringify(profile));
+}
 
 function getInitials(name) {
   if (!name) return '?';
